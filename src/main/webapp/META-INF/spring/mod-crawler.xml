@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean name="crawlerProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <map>
+                <entry key="resultFetchSize" value="100"/>
+            </map>
+        </property>
+    </bean>
+    
+    <bean parent="jobSchedulingBean">
+        <property name="ramJob" value="true"/>
+        <property name="trigger">
+            <bean class="org.quartz.CronTrigger">
+                <property name="name" value="CrawlCronTrigger"/>
+                <!-- Will start the process at 3 a.m -->
+                <property name="cronExpression" value="0 0 3 * * ?"/> 
+            </bean>
+        </property>
+        <property name="jobDetail">
+            <bean class="org.springframework.scheduling.quartz.JobDetailBean">
+                <property name="name" value="CrawlJob"/>
+                <property name="group" value="CrawlJob"/>
+                <property name="jobClass" value="org.jahia.modules.crawl.CrawlJob"/>
+                <property name="jobDataAsMap">
+                    <map>
+                        <entry key="urls">
+                            <list>
+                                <value>http://localhost:8080/jahia/cms/render/live/en/sites/ACME/home.html</value>
+                            </list>
+                        </entry>
+                        <entry key="sites">
+                            <list>
+                                <!--<value>http://example.domain.com</value>-->
+                            </list>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>        
+    </bean>
+</beans>
