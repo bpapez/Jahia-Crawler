@@ -63,6 +63,7 @@ import org.apache.nutch.indexer.Indexer;
 import org.apache.nutch.parse.ParseSegment;
 import org.apache.nutch.util.HadoopFSUtil;
 import org.apache.nutch.util.NutchJob;
+import org.drools.util.StringUtils;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -77,14 +78,10 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 public class CrawlJob extends QuartzJobBean {
     private static Logger logger = Logger.getLogger(CrawlJob.class);
 
-    private final static Path baseDir = new Path(
-            System.getProperty("java.io.tmpdir")
-                    + (!(System.getProperty("java.io.tmpdir").endsWith("/") || System.getProperty("java.io.tmpdir").endsWith("\\")) ? System
-                            .getProperty("file.separator") : "") + "nutch/jahia");
-
     private Configuration conf;
 
     private FileSystem fs;
+    private Path baseDir;
 
     private Path crawldbPath;
     private Path segmentsPath;
@@ -93,7 +90,7 @@ public class CrawlJob extends QuartzJobBean {
     private Path segments;
     private Path indexes;
     private Path index;
-    
+
     public void init() {
         try {
             conf = CrawlDBUtil.createConfiguration();
@@ -115,15 +112,25 @@ public class CrawlJob extends QuartzJobBean {
     }
 
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        if (conf == null) {
-            init();
-        }
         try {
             JobDataMap mergedJobDataMap = context.getMergedJobDataMap();
+            if (conf == null) {
+                String baseDirPath = (String) mergedJobDataMap.get("baseDir");
+                if (StringUtils.isEmpty(baseDirPath)) {
+                    baseDirPath = System.getProperty("user.dir");
+                }
+                String folderName = (String) mergedJobDataMap.get("folderName");
+                if (folderName == null) {
+                    folderName = "jahia-crawler";
+                }
+                baseDir = new Path(baseDirPath + (StringUtils.isEmpty(folderName) ? "" : System.getProperty("file.separator")) + folderName);
+                init();
+            }
+
             List<String> urls = (List<String>) mergedJobDataMap.get("urls");
-            
+
             JobConf job = new NutchJob(conf);
-            
+
             Path tmpDir = job.getLocalPath("crawl" + Path.SEPARATOR + getDate());
 
             CrawlDBUtil.generateSeedList(fs, urlPath, urls);

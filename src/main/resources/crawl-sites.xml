@@ -94,7 +94,7 @@
 
 <property>
   <name>searcher.dir</name>
-  <value>C:\Users\Benjamin\AppData\Local\Temp\nutch\jahia\</value>
+  <value>${user.dir}/jahia-crawler/</value>
   <description>
   Path to root of crawl.  This directory is searched (in
   order) for either the file search-servers.txt, containing a list of
