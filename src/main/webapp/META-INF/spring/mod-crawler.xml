@@ -32,11 +32,6 @@
                                 <value>http://localhost:8080/jahia/cms/render/live/en/sites/ACME/home.html</value>
                             </list>
                         </entry>
-                        <entry key="sites">
-                            <list>
-                                <!--<value>http://example.domain.com</value>-->
-                            </list>
-                        </entry>
                     </map>
                 </property>
             </bean>
