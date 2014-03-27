@@ -46,6 +46,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -63,7 +64,6 @@ import org.apache.nutch.indexer.Indexer;
 import org.apache.nutch.parse.ParseSegment;
 import org.apache.nutch.util.HadoopFSUtil;
 import org.apache.nutch.util.NutchJob;
-import org.drools.util.StringUtils;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

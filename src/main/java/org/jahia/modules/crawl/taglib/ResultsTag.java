@@ -108,13 +108,13 @@ public class ResultsTag extends AbstractJahiaTag {
             Configuration conf = CrawlDBUtil.createConfiguration();
             NutchBean bean = new NutchBean(conf);
             Query query = Query.parse(criteria.getTerms().get(0).getTerm(), conf);
-            Properties crawlerProperties = (Properties) SpringContextSingleton.getModuleBean("crawlerProperties");
-            int numHits = (criteria.getOffset() > 0 || criteria.getLimit() > 0) ? (criteria.getOffset() + 1) * criteria.getLimit()
-                    : Integer.parseInt(crawlerProperties.getProperty("resultFetchSize"));  
+            Properties crawlerProperties = (Properties) SpringContextSingleton.getBeanInModulesContext("crawlerProperties");
+            int numHits = (int)((criteria.getOffset() > 0 || criteria.getLimit() > 0) ? (criteria.getOffset() + 1) * criteria.getLimit()
+                    : Integer.parseInt(crawlerProperties.getProperty("resultFetchSize")));  
 
             Hits nutchHits = bean.search(query, numHits);
             if (nutchHits.getLength() > criteria.getOffset()) {
-                hits = convertToJahiaHits(bean, nutchHits.getHits(criteria.getOffset(), nutchHits.getLength()), query, renderContext);
+                hits = convertToJahiaHits(bean, nutchHits.getHits((int)criteria.getOffset(), nutchHits.getLength()), query, renderContext);
             } else {
                 hits = Collections.emptyList();
             }
