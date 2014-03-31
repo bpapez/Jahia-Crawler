@@ -98,6 +98,36 @@
     <!-- End of Nutch and its dependencies --> 
   </dependencies>  
   <build> 
-    <plugins></plugins> 
+    <plugins> 
+      <plugin> 
+        <groupId>org.apache.felix</groupId>  
+        <artifactId>maven-bundle-plugin</artifactId>  
+        <extensions>true</extensions>  
+        <configuration> 
+          <instructions> 
+            <Import-Package>
+            org.apache.commons.cli2;resolution:=optional, 
+            org.apache.commons.cli2.builder;resolution:=optional, 
+            org.apache.commons.cli2.commandline;resolution:=optional, 
+            org.apache.commons.cli2.option;resolution:=optional, 
+            org.apache.tools.ant.types;resolution:=optional, 
+            org.jets3t.service;resolution:=optional,
+            org.jets3t.service.impl.rest.httpclient;resolution:=optional,
+            org.jets3t.service.model;resolution:=optional,
+            org.jets3t.service.security;resolution:=optional,
+            org.kosmix.kosmosfs.access;resolution:=optional,
+            org.mortbay.http;resolution:=optional,
+            org.mortbay.jetty;resolution:=optional,
+            org.mortbay.jetty.servlet;resolution:=optional,
+            org.mortbay.util;resolution:=optional,
+            org.znerd.xmlenc;resolution:=optional,
+            ${jahia.plugin.projectPackageImport},
+            *
+            </Import-Package>
+            <Jahia-Depends>default</Jahia-Depends> 
+          </instructions> 
+        </configuration> 
+      </plugin> 
+    </plugins> 
   </build> 
 </project>
